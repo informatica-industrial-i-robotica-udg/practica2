@@ -3,7 +3,7 @@ import cv2
 import yaml
 
 # termination criteria
-criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
+criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 25, 0.001)
 # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
 objp = np.zeros((6*9,3), np.float32)
 objp[:,:2] = np.mgrid[0:9,0:6].T.reshape(-1,2)
@@ -29,7 +29,10 @@ while(found < 10):
         img = cv2.drawChessboardCorners(img, (9,6), corners2, ret)
         found += 1
     cv2.imshow('img', img)
-    cv2.waitKey(10)
+    cv2.waitKey(1000)
+    print(found)
+
+
 # When everything done, release the capture
 cap.release()
 cv2.destroyAllWindows()
@@ -38,5 +41,7 @@ cv2.destroyAllWindows()
 ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
 # It's very important to transform the matrix to list.
 data = {'camera_matrix': np.asarray(mtx).tolist(), 'dist_coeff':np.asarray(dist).tolist()}
-with open("calibration.yaml", "w") as f:
-    yaml.dump(data, f)
+np.savez('calibration.z', mtx=mtx, dist=dist)
+
+#with open("calibration.yaml", "w") as f:
+#    yaml.dump(data, f)
