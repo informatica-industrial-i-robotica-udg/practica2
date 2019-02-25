@@ -24,8 +24,8 @@ class StereoCalibration(object):
         self.read_images(self.cal_path)
 
     def read_images(self, cal_path):
-        images_right = glob.glob(cal_path + 'RIGHT/*.JPG')
-        images_left = glob.glob(cal_path + 'LEFT/*.JPG')
+        images_right = glob.glob(cal_path + 'right-*.jpg')
+        images_left = glob.glob(cal_path + 'left-*.jpg')
         images_left.sort()
         images_right.sort()
 
@@ -107,8 +107,8 @@ class StereoCalibration(object):
         cv2.destroyAllWindows()
         return camera_model
 
-    if __name__ == '__main__':
-        parser = argparse.ArgumentParser()
-        parser.add_argument('filepath', help='String Filepath')
-        args = parser.parse_args()
-        cal_data = StereoCalibration(args.filepath)
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('filepath', help='String Filepath')
+    args = parser.parse_args()
+    cal_data = StereoCalibration(args.filepath)
