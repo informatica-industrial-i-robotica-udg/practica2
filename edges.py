@@ -48,9 +48,11 @@ objp[:,:2] = np.mgrid[0:9,0:6].T.reshape(-1,2)
 # Per pintar el cub 3D
 axis = np.float32([[0,0,0],[0,3,0],[3,3,0],[3,0,0],[0,0,-3],[0,3,-3],[3,3,-3],[3,0,-3]])
 
-for fname in glob.glob('left*.jpg'):
-    img = cv2.imread(fname)
-    gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+cap = cv2.VideoCapture(0)
+while(cap.isOpened()):
+    # capture frame-by-frame, cap.read() es la comanda per començar a capturar imatges
+    ret, frame = cap.read()
+    gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
     ret, corners = cv2.findChessboardCorners(gray, (9,6),None)
 
     if ret == True:
@@ -63,10 +65,12 @@ for fname in glob.glob('left*.jpg'):
         # project 3D points to image plane
         imgpts, jac = cv2.projectPoints(axis, rvecs, tvecs, mtx, dist)
 
-        img = drawCube(img,corners2,imgpts)
-        cv2.imshow('img',img)
+        img = drawCube(frame,corners2,imgpts)
+        cv2.imshow('img',frame)
         k = cv2.waitKey(0) & 0xff
         if k == 's':
-            cv2.imwrite(fname[:6]+'.png', img)
+            cv2.imwrite(frame[:6]+'.png', img)
+
+    frame = cv2.flip(frame,0)
 
 cv2.destroyAllWindows()
