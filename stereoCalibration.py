@@ -4,7 +4,7 @@ import glob
 import argparse
 
 
-class StereoCalibration(object):
+class stereoCalibration(object):
 
     def __init__(self, filepath):
         # termination criteria
@@ -24,44 +24,70 @@ class StereoCalibration(object):
         self.read_images(self.cal_path)
 
     def read_images(self, cal_path):
-        images_right = glob.glob(cal_path + 'right-*.jpg')
-        images_left = glob.glob(cal_path + 'left-*.jpg')
-        images_left.sort()
-        images_right.sort()
+        # images_right = glob.glob(cal_path + 'right-*.jpg')
+        # images_left = glob.glob(cal_path + 'left-*.jpg')
+        # images_left.sort()
+        # images_right.sort()
+        cap_l = cv2.VideoCapture(0)
+        cap_r = cv2.VideoCapture(1)
 
-        for i, fname in enumerate(images_right):
-            img_l = cv2.imread(images_left[i])
-            img_r = cv2.imread(images_right[i])
-            gray_l = cv2.cvtColor(img_l, cv2.COLOR_BGR2GRAY)
-            gray_r = cv2.cvtColor(img_r, cv2.COLOR_BGR2GRAY)
+        #capture frame-by-frame, cap.read() és la comanda per començar a capturar imatges
+        cap = 0
+        #for i, fname in enumerate(images_right):
+
+        while(cap < 10):
+            print("Tanto que xuto!! ... 3 ")
+            cv2.waitKey(1000)
+            print("Tanto que xuto!! ... 2 ")
+            cv2.waitKey(1000)
+            print("Tanto que xuto!! ... 1 ")
+            cv2.waitKey(1000)
+            #img_l = cv2.imread(images_left[i])
+            #img_r = cv2.imread(images_right[i])
+            ret_l, img_l = cap_l.read()
+            ret_r, img_r = cap_r.read()
+            #gray_l = cv2.cvtColor(img_l, cv2.COLOR_BGR2GRAY)
+            #gray_r = cv2.cvtColor(img_r, cv2.COLOR_BGR2GRAY)
+            #Our operations on the frame com here
+            gray_l = cv2.cvtColor(img_l,cv2.COLOR_BGR2GRAY)
+            gray_r = cv2.cvtColor(img_r,cv2.COLOR_BGR2GRAY)
+
             # Find the chess board corners
             ret_l, corners_l = cv2.findChessboardCorners(gray_l, (9, 6), None)
             ret_r, corners_r = cv2.findChessboardCorners(gray_r, (9, 6), None)
             # If found, add object points, image points (after refining them)
             self.objpoints.append(self.objp)
-
+            cap_L=0
+            cap_R=0
             if ret_l is True:
                 rt = cv2.cornerSubPix(gray_l, corners_l, (11, 11), (-1, -1), self.criteria)
                 self.imgpoints_l.append(corners_l)
                 # Draw and display the corners
-                ret_l = cv2.drawChessboardCorners(img_l, (9, 6),
-                corners_l, ret_l)
-                cv2.imshow(images_left[i], img_l)
-                cv2.waitKey(500)
+                ret_l = cv2.drawChessboardCorners(img_l, (9, 6),corners_l, ret_l)
+                cv2.imshow('frame_left', img_l)
+                cap_L = 1
+
 
             if ret_r is True:
                 rt = cv2.cornerSubPix(gray_r, corners_r, (11, 11), (-1, -1), self.criteria)
                 self.imgpoints_r.append(corners_r)
                 # Draw and display the corners
-                ret_r = cv2.drawChessboardCorners(img_r, (9, 6),
-                corners_r, ret_r)
-                cv2.imshow(images_right[i], img_r)
-                cv2.waitKey(500)
-            img_shape = gray_l.shape[::-1]
-            rt, self.M1, self.d1, self.r1, self.t1 = cv2.calibrateCamera(self.objpoints, self.imgpoints_l, img_shape, None, None)
-            rt, self.M2, self.d2, self.r2, self.t2 = cv2.calibrateCamera(self.objpoints, self.imgpoints_r, img_shape, None, None)
+                ret_r = cv2.drawChessboardCorners(img_r, (9, 6),corners_r, ret_r)
+                cv2.imshow('frame_right', img_r)
+                cap_R = 1
 
-            self.camera_model = self.stereo_calibrate(img_shape)
+            print("Boom!")
+
+            if cap_L == 1 and cap_R == 1:
+                cap +=1
+                print(cap)
+                img_shape = gray_l.shape[::-1]
+                rt, self.M1, self.d1, self.r1, self.t1 = cv2.calibrateCamera(self.objpoints, self.imgpoints_l, img_shape, None, None)
+                rt, self.M2, self.d2, self.r2, self.t2 = cv2.calibrateCamera(self.objpoints, self.imgpoints_r, img_shape, None, None)
+
+                self.camera_model = self.stereo_calibrate(img_shape)
+
+
 
 
     def stereo_calibrate(self, dims):
