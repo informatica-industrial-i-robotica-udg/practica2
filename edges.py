@@ -67,9 +67,7 @@ while(cap.isOpened()):
 
         img = drawCube(frame,corners2,imgpts)
         cv2.imshow('img',frame)
-        k = cv2.waitKey(0) & 0xff
-        if k == 's':
-            cv2.imwrite(frame[:6]+'.png', img)
+        k = cv2.waitKey(50) & 0xff
 
     frame = cv2.flip(frame,0)
 
