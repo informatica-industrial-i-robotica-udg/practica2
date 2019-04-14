@@ -51,6 +51,7 @@ axis = np.float32([[0,0,0],[0,3,0],[3,3,0],[3,0,0],[0,0,-3],[0,3,-3],[3,3,-3],[3
 cap = cv2.VideoCapture(0)
 while(cap.isOpened()):
     # capture frame-by-frame, cap.read() es la comanda per començar a capturar imatges
+	
     ret, frame = cap.read()
     gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
     ret, corners = cv2.findChessboardCorners(gray, (9,6),None)
@@ -67,10 +68,9 @@ while(cap.isOpened()):
 
         img = drawCube(frame,corners2,imgpts)
         cv2.imshow('img',frame)
-        k = cv2.waitKey(0) & 0xff
-        if k == 's':
-            cv2.imwrite(frame[:6]+'.png', img)
+        k = cv2.waitKey(100) & 0xff
 
     frame = cv2.flip(frame,0)
+	
 
 cv2.destroyAllWindows()
