@@ -221,6 +221,17 @@ F [[-5.12417102e-09 -4.45691648e-06 -2.06676613e-03]
 
 ## Annexes 
 
+### Fitxers de la pràctica
+
+- **calibratge.py** : Captura 10 cops 10 imatges amb una diferència de 0.5 segons cada imatge i calibra la càmera i extreu un fitxer .yaml. 
+- **edges.py** : Obre el fitxer .yaml resultant de fer la calibració i pinta els eixos d'un objecte 3D sobre els fitxers que hi ha al fitxer imatges. (les variables x i y son les que estipulen el nombre de punts en l'eix x i l'eix y)
+- **photomaton.py** : simplement realitza una imatge i la desa al directori imatges. S'ha utilitzat per depurar.
+- **stereoCalibration.py** : realitza una calibració dual amb 10 captures per a cada càmera sincronitzades. 
+- **calibration.yaml** : Exemple de model de calibració resultat de un calibratge.py. 
+- **calibration.z.npz** : Calibratge resultant en format z.npz.
+- **README.md** : Font d'aquest document. 
+- **sortida2cams.txt** : El resultat de l'execució del calibratge de dues càmeres (el que es va pintar per pantalla portat cap a un fitxer).
+
 ### Exemple de Calibratge amb una sola càmera
 
 Es veu representada la matriu de coeficients i el vector de distorsions.
